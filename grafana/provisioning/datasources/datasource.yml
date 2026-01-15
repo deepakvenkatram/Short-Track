@@ -1,0 +1,24 @@
+# /grafana/provisioning/datasources/datasource.yml
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL-ShortTrack
+    type: postgres
+    # URL uses the service name from docker-compose
+    url: postgres:5432
+    user: shorttrack
+    database: shorttrack
+    # isDefault makes this the default datasource for new panels
+    isDefault: true
+    # jsonData allows you to configure database-specific settings
+    jsonData:
+      sslmode: 'disable' # Required for connecting to the default postgres container
+      # Time interval for the $__timeFilter() macro.
+      timeInterval: '5s'
+    # secureJsonData is used for sensitive information like passwords
+    secureJsonData:
+      password: 'supersecret'
+    # Version of the datasource plugin. 1 for all core plugins.
+    version: 1
+    # Allow editing this datasource from the Grafana UI
+    editable: true

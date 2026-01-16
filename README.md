@@ -21,40 +21,6 @@ The application follows a distributed, multi-tier architecture. The data flows t
 
 ![WorkFlow Image](Screenshot/WORKFLOW-DIAGRAM.png)
 
-
-```
-                                                              +-----------------+
-                                                          +-->|     Redis     |
-                                                          |   |    (Cache)    |
-                                                          |   +---------------+
-                                                          |
-+----------+      +----------------+      +---------------+   +-----------------+
-|          |      |                |      |               |-->|   PostgreSQL  |
-|   User   |----->| Frontend (Nginx)|----->|  API Service  |   |   (Storage)   |
-|          |      |                |      |     (Go)      |   +---------------+
-+----------+      +----------------+      +---------------+
-   ^      |                                       |
-   |      |                                       | (Publish Event)
-   |      |                                       v
-   |      +----------------------------------+    +-----------------+
-   |         (Redirect)                      |    |    RabbitMQ     |
-   +-----------------------------------------+    | (Message Queue) |
-                                                  +-------+---------+
-                                                          |
-                                                          | (Consume Event)
-                                                          v
-                                                  +-------+---------+   +-----------------+
-                                                  | Analytics Worker|-->|   PostgreSQL  |
-                                                  |      (Go)       |   | (Click Events)|
-                                                  +-----------------+   +-------+---------+
-                                                                                  ^
-                                                                                  |
-                                                                          +-------+---------+
-                                                                          |     Grafana     |
-                                                                          |   (Dashboard)   |
-                                                                          +-----------------+
-```
-
 ## Technology Stack
 
 *   **Backend:** Go

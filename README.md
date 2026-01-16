@@ -19,6 +19,9 @@ At its core, it's a simple tool: give it a long URL, and it gives you a short on
 
 The application follows a distributed, multi-tier architecture. The data flows through two primary paths: the user-facing shortening/redirect path and the internal analytics path.
 
+![WorkFlow Image](Screenshot/WORKFLOW-DIAGRAM.png)
+
+
 ```
                                                               +-----------------+
                                                           +-->|     Redis     |

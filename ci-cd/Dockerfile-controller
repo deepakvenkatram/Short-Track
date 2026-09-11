@@ -1,0 +1,8 @@
+# /ci-cd/Dockerfile-controller
+# This Dockerfile creates a custom Jenkins controller image that includes
+# a pre-defined list of plugins to install on startup.
+
+FROM jenkins/jenkins:lts-jdk17
+
+# Copy the plugins list into the location Jenkins checks during startup
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt

@@ -1,0 +1,7 @@
+# /ci-cd/plugins.txt
+# This file lists the plugins to be automatically installed by Jenkins on startup.
+configuration-as-code:latest
+docker-plugin:latest
+git:latest
+workflow-aggregator:latest # Provides Pipeline functionality
+blueocean:latest # Provides a modern UI for viewing pipelines

@@ -1,0 +1,35 @@
+# /ci-cd/docker-compose.yml
+version: '3.8'
+
+services:
+  # The main Jenkins server, now built from a Dockerfile
+  jenkins-controller:
+    build:
+      context: .
+      dockerfile: Dockerfile-controller
+    ports:
+      - "8080:8080" # Web UI
+      - "50000:50000" # Agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      # Mount the JCasC file into the location Jenkins expects
+      - ./jenkins.casc.yml:/var/jenkins_home/casc_configs/jenkins.yaml
+    environment:
+      # Point Jenkins to our Configuration as Code file
+      - CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/jenkins.yaml
+    restart: on-failure
+
+  # Our custom agent where the pipeline jobs will run
+  jenkins-agent:
+    build:
+      context: . # Build the Dockerfile in the current directory (ci-cd/)
+    # Mount the Docker socket to allow the agent to run Docker commands
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: on-failure
+    depends_on:
+      - jenkins-controller
+
+volumes:
+  # This named volume will persist all Jenkins data (jobs, plugins, configs)
+  jenkins_home:

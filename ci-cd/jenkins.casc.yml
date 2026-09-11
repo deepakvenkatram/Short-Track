@@ -1,0 +1,29 @@
+# /ci-cd/jenkins.casc.yml
+# Jenkins Configuration as Code
+jenkins:
+  # Configure a 'global-agent' label for our custom docker agent
+  labelAtoms:
+    - name: "custom-agent"
+  nodes:
+    - permanent:
+        # This configures the built-in node (the controller)
+        name: "built-in"
+        # We don't want to run jobs on the controller, so we set executors to 0
+        numExecutors: 0
+        # We assign a label so we can avoid it if needed
+        label: "built-in"
+  # Configure the Docker plugin to use our custom agent
+  clouds:
+    - docker:
+        name: "docker"
+        # The Docker host URI inside the container
+        dockerHost: "unix:///var/run/docker.sock"
+        templates:
+          - label: "custom-agent"
+            # The image is the one built by our docker-compose file, named ci-cd-jenkins-agent
+            image: "ci-cd_jenkins-agent"
+            # The remote file system root inside the agent container
+            remoteFs: "/home/jenkins/agent"
+            # We need to mount the docker socket from the controller into the agent
+            volumes:
+              - "/var/run/docker.sock:/var/run/docker.sock"

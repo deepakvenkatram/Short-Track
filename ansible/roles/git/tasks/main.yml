@@ -1,0 +1,5 @@
+# /ansible/roles/git/tasks/main.yml
+- name: Install Git
+  apt:
+    name: git
+    state: present

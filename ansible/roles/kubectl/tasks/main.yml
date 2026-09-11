@@ -1,0 +1,19 @@
+# /ansible/roles/kubectl/tasks/main.yml
+- name: Get the latest stable kubectl version string
+  uri:
+    url: "https://dl.k8s.io/release/stable.txt"
+    return_content: yes
+  register: kubectl_version
+
+- name: Download the kubectl binary
+  get_url:
+    url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl"
+    dest: "/tmp/kubectl"
+    mode: '0755' # Set executable permission on download
+
+- name: Move the kubectl binary to a system path
+  copy:
+    src: "/tmp/kubectl"
+    dest: "/usr/local/bin/kubectl"
+    remote_src: yes # Important: indicates the src is on the remote machine
+    mode: '0755'

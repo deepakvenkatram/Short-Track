@@ -1,0 +1,13 @@
+# /ansible/roles/common/tasks/main.yml
+- name: Update apt package cache
+  apt:
+    update_cache: yes
+  changed_when: false # This task should not report a change
+
+- name: Install prerequisite packages
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present

@@ -1,0 +1,8 @@
+# /ansible/setup-host.yml
+- hosts: control_node
+  become: true
+  roles:
+    - common
+    - git
+    - docker
+    - kubectl

@@ -1,0 +1,41 @@
+# /k8s/grafana-configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-config
+data:
+  # Content of /grafana/provisioning/datasources/datasource.yml
+  datasource.yml: |-
+    apiVersion: 1
+    datasources:
+      - name: PostgreSQL-ShortTrack
+        type: postgres
+        # In Kubernetes, the URL will be the name of the postgres Service
+        url: postgres-service:5432
+        user: shorttrack
+        database: shorttrack
+        isDefault: true
+        jsonData:
+          sslmode: 'disable'
+          timeInterval: '5s'
+        secureJsonData:
+          password: '${POSTGRES_PASSWORD}' # Note: We'll get this from a Secret
+        version: 1
+        editable: true
+
+  # Custom grafana.ini settings
+  grafana.ini: |
+    [dashboards]
+    enable_public = true
+  # Content of /grafana/provisioning/dashboards/dashboard.yml
+  dashboard.yml: |-
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /etc/grafana/provisioning/dashboards

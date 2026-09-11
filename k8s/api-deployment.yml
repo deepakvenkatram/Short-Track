@@ -1,0 +1,31 @@
+# /k8s/api-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          # IMPORTANT: Replace this with the path to your own image in a container registry
+          image: dvenkatram/projects:short-track-api 
+          ports:
+            - containerPort: 8080
+          # This section tells Kubernetes how to set the environment variables for the container
+          envFrom:
+            # Load all key-value pairs from the 'api-configmap' ConfigMap
+            - configMapRef:
+                name: api-configmap
+            # Load all key-value pairs from the 'api-secret' Secret
+            - secretRef:
+                name: api-secret

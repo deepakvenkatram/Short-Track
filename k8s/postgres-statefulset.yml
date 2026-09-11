@@ -1,0 +1,40 @@
+# /k8s/postgres-statefulset.yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: "postgres-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+              name: postgres
+          # We reuse the same ConfigMap and Secret to configure the database itself
+          envFrom:
+            - configMapRef:
+                name: api-configmap
+            - secretRef:
+                name: api-secret
+          volumeMounts:
+            - name: postgres-data
+              # This is the default data directory for the postgres image
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,23 @@
+# /k8s/frontend-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 2 # We can run multiple pods for high availability
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          # IMPORTANT: Replace this with the path to your own image in a container registry
+          image: dvenkatram/projects:short-track-frontend
+          ports:
+            - containerPort: 80 # The port the Nginx container listens on

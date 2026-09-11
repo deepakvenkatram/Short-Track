@@ -1,0 +1,16 @@
+# /k8s/api-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+spec:
+  selector:
+    app: api
+  # We use LoadBalancer here for easy testing. In a production setup, if only
+  # in-cluster services needed to access this, we might use the default 'ClusterIP' type.
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      # We'll expose it on the same port we used in Docker Compose for consistency
+      port: 8088
+      targetPort: 8080

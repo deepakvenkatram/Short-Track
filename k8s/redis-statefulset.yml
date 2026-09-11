@@ -1,0 +1,35 @@
+# /k8s/redis-statefulset.yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  serviceName: "redis-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+              name: redis
+          volumeMounts:
+            - name: redis-data
+              # This is the directory where Redis stores its data
+              mountPath: /data
+  # This template will be used to create a PersistentVolumeClaim for each pod
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"] # This volume can be mounted by a single node
+        resources:
+          requests:
+            storage: 1Gi # Request 1 Gibibyte of storage

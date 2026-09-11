@@ -1,0 +1,12 @@
+# /k8s/postgres-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service # This name matches the POSTGRES_HOST in our ConfigMap
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

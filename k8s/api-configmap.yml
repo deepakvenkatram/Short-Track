@@ -1,0 +1,15 @@
+# /k8s/api-configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configmap
+data:
+  # These are the values our Go application will read from the environment
+  POSTGRES_HOST: "postgres-service" # Note: This will be the name of our postgres Service
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "shorttrack"
+  POSTGRES_USER: "shorttrack"
+  REDIS_HOST: "redis-service" # Note: This will be the name of our redis Service
+  REDIS_PORT: "6379"
+  RABBITMQ_HOST: "rabbitmq-service" # Note: This will be the name of our rabbitmq Service
+  RABBITMQ_PORT: "5672"

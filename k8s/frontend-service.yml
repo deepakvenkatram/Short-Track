@@ -1,0 +1,18 @@
+# /k8s/frontend-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  # The 'selector' links this Service to the Pods managed by our Deployment
+  selector:
+    app: frontend
+  # 'LoadBalancer' type exposes the service externally using a cloud provider's load balancer.
+  # For local clusters like Minikube, you would use 'minikube tunnel' to access it.
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      # Port on the load balancer
+      port: 80
+      # Port on the pods
+      targetPort: 80

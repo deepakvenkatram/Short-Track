@@ -1,0 +1,28 @@
+# /k8s/analytics-worker-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-worker-deployment
+  labels:
+    app: analytics-worker
+spec:
+  replicas: 2 # We can scale our workers if the analytics queue gets busy
+  selector:
+    matchLabels:
+      app: analytics-worker
+  template:
+    metadata:
+      labels:
+        app: analytics-worker
+    spec:
+      containers:
+        - name: analytics-worker
+          # IMPORTANT: Replace this with the path to your own image in a container registry
+          image: dvenkatram/projects:short-track-analytics-worker
+          # This service doesn't need any ports exposed
+          # It reuses the same ConfigMap and Secret as the API service
+          envFrom:
+            - configMapRef:
+                name: api-configmap
+            - secretRef:
+                name: api-secret
